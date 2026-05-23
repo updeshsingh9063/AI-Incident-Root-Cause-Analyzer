@@ -16,8 +16,12 @@ import integrationsRouter from './routes/integrations';
 import { errorHandler } from './middleware/errorHandler';
 import { authMiddleware } from './middleware/auth';
 import { setupWebSocketHandlers } from './websocket/handlers';
+import { connectDB } from './config/db';
 
 dotenv.config();
+
+// Connect to MongoDB
+connectDB();
 
 const app = express();
 const httpServer = createServer(app);
@@ -36,7 +40,7 @@ setupWebSocketHandlers(io);
 app.use(helmet());
 app.use(compression());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: true, // Allow any origin for development
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -62,6 +66,28 @@ app.get('/health', (_, res) => {
     uptime: process.uptime(),
     environment: process.env.NODE_ENV || 'development',
   });
+});
+
+// ─── Prometheus Metrics ─────────────────────────────────────────────────────
+app.get('/metrics', (_, res) => {
+  const memoryUsage = process.memoryUsage();
+  const uptime = process.uptime();
+  
+  let prometheusMetrics = '';
+  prometheusMetrics += `# HELP node_process_uptime_seconds Uptime of the Node.js process\n`;
+  prometheusMetrics += `# TYPE node_process_uptime_seconds gauge\n`;
+  prometheusMetrics += `node_process_uptime_seconds ${uptime}\n\n`;
+
+  prometheusMetrics += `# HELP node_memory_rss_bytes Resident Set Size memory usage\n`;
+  prometheusMetrics += `# TYPE node_memory_rss_bytes gauge\n`;
+  prometheusMetrics += `node_memory_rss_bytes ${memoryUsage.rss}\n\n`;
+
+  prometheusMetrics += `# HELP node_memory_heap_used_bytes Heap memory used\n`;
+  prometheusMetrics += `# TYPE node_memory_heap_used_bytes gauge\n`;
+  prometheusMetrics += `node_memory_heap_used_bytes ${memoryUsage.heapUsed}\n\n`;
+
+  res.set('Content-Type', 'text/plain; version=0.0.4; charset=utf-8');
+  res.send(prometheusMetrics);
 });
 
 // ─── API Routes ────────────────────────────────────────────────────────────

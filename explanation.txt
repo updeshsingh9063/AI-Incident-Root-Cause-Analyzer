@@ -1,0 +1,62 @@
+AI INCIDENT ROOT CAUSE ANALYZER
+===============================
+
+What is this project doing?
+---------------------------
+The "AI Incident Root Cause Analyzer" is an advanced DevOps and Site Reliability Engineering (SRE) platform. When a complex software system or microservice architecture breaks down, finding the actual cause can take hours of manually digging through logs, metrics, and deployment histories. 
+
+This application automates that process. It ingests system data (logs, metrics, and infrastructure topology) and uses Artificial Intelligence (Large Language Models) to instantly analyze anomalies. It connects the dots between a symptom (e.g., "Payment service is down") and the root cause (e.g., "A recent deployment caused a massive spike in JWT errors which exhausted the database connection pool"). It acts as an intelligent assistant that helps engineering teams resolve downtime incredibly fast.
+
+
+Navigation & Sections (What each button does)
+---------------------------------------------
+
+1. Overview
+   The main dashboard. It provides a high-level summary of system health, total active incidents, key performance indicators (KPIs), and a quick snapshot of the most critical alerts.
+
+2. Active Incidents
+   A triage board displaying all currently ongoing issues. Incidents are categorized by severity (Critical, High, Medium, Low) and show how long they have been active.
+
+3. Root Cause AI
+   The core intelligence engine. You can select an incident here, and the AI will analyze the surrounding logs and metrics to generate a plain-English explanation of exactly what broke, why it broke, and recommended steps to fix it.
+
+4. Live Logs
+   A real-time terminal interface streaming logs from across your entire infrastructure (Backend, Frontend, Databases, etc.). It allows engineers to search and filter raw logs as events happen.
+
+5. Metrics
+   Visual dashboards (similar to Grafana) displaying time-series data. This section shows CPU usage, memory consumption, network traffic, request latency, and error rates over time.
+
+6. Topology Map
+   A visual, interactive map of your microservices architecture. It shows how different services communicate with each other. If a service goes down, the map highlights it in red and shows which dependent services are affected (cascading failures).
+
+7. Deployments
+   A timeline of recent code releases and infrastructure changes. Since most incidents are caused by recent changes, this section helps correlate a system failure with a specific deployment.
+
+8. Incident History
+   An archive of all resolved past incidents. Useful for auditing, identifying recurring issues, and reviewing long-term system stability.
+
+9. AI Copilot
+   An interactive chat interface. Engineers can chat directly with the AI and ask questions like "Why did the database spike at 3 PM?" or "Write a kubectl command to rollback the last payment service deployment."
+
+10. Team Analytics
+    Metrics focused on the engineering team's performance. It tracks things like Mean Time To Acknowledge (MTTA) and Mean Time To Resolution (MTTR) to help teams improve their incident response speed.
+
+11. Postmortems
+    Documentation generated after an incident is resolved. The AI can automatically draft these reports detailing what went wrong, how it was fixed, and action items to prevent it from happening again.
+
+12. Integrations
+    The configuration hub for connecting the analyzer to external tools. This is where you link up PagerDuty (for alerts), Slack (for notifications), AWS/Kubernetes (for infrastructure data), and OpenAI/Groq (for the AI models).
+
+13. Settings
+    General application preferences, user management, API keys, and theme customizations for the platform.
+
+
+Environment Variables & API Keys
+--------------------------------
+The project relies on a `.env` file to securely store API keys and configuration parameters. Here is a breakdown of what each key is doing:
+
+- OPENAI_API_KEY: Authenticates with OpenAI. Powers the core Artificial Intelligence features of the platform, including the Root Cause AI analyzer, the AI Copilot chat interface, and log interpretation.
+- GROQ_API_KEY: Authenticates with Groq's ultra-fast inference API. Provides a high-speed alternative for running open-source Large Language Models (like Llama 3) for real-time log analysis and streaming responses.
+- JWT_SECRET: A secure cryptographic key used by the backend server. It is responsible for signing and verifying JSON Web Tokens (JWTs) to ensure secure user authentication and authorization across the platform.
+- PINECONE_API_KEY: Authenticates with Pinecone, a specialized vector database. It stores mathematical representations (embeddings) of past incidents, documentation, and logs. This enables the AI to perform semantic searches and remember historical context (Retrieval-Augmented Generation or RAG).
+- PINECONE_ENV: Specifies the geographical hosting region for the Pinecone database (e.g., `us-east-1`).

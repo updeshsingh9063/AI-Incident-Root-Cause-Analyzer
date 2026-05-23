@@ -12,7 +12,7 @@ export const mockIncidents = [
     service: 'payment-service',
     environment: 'production',
     region: 'us-east-1',
-    startedAt: new Date(Date.now() - 23 * 60000),
+    startedAt: new Date(1716500000000 - 23 * 60000),
     aiConfidence: 94,
     rootCause: 'Database connection pool exhaustion due to unoptimized query in payment-processor v2.3.1',
     affectedServices: ['payment-service', 'order-service', 'checkout-api', 'fraud-detection'],
@@ -29,7 +29,7 @@ export const mockIncidents = [
     service: 'auth-service',
     environment: 'production',
     region: 'eu-west-1',
-    startedAt: new Date(Date.now() - 47 * 60000),
+    startedAt: new Date(1716500000000 - 47 * 60000),
     aiConfidence: 87,
     rootCause: 'Redis session cache eviction under memory pressure — cache hit rate dropped to 23%',
     affectedServices: ['auth-service', 'api-gateway', 'user-service'],
@@ -46,7 +46,7 @@ export const mockIncidents = [
     service: 'data-pipeline',
     environment: 'production',
     region: 'us-west-2',
-    startedAt: new Date(Date.now() - 92 * 60000),
+    startedAt: new Date(1716500000000 - 92 * 60000),
     aiConfidence: 91,
     rootCause: 'Memory leak in spark-job-processor v1.8.2 — Java heap allocation not released after batch completion',
     affectedServices: ['data-pipeline', 'analytics-service', 'reporting-api'],
@@ -63,7 +63,7 @@ export const mockIncidents = [
     service: 'cdn-layer',
     environment: 'production',
     region: 'global',
-    startedAt: new Date(Date.now() - 3 * 3600000),
+    startedAt: new Date(1716500000000 - 3 * 3600000),
     aiConfidence: 98,
     rootCause: 'Deployment of v4.2.0 changed Cache-Control headers to no-cache, bypassing CDN entirely',
     affectedServices: ['cdn-layer', 'static-assets', 'media-service'],
@@ -80,7 +80,7 @@ export const mockIncidents = [
     service: 'postgres-cluster',
     environment: 'production',
     region: 'us-east-1',
-    startedAt: new Date(Date.now() - 8 * 3600000),
+    startedAt: new Date(1716500000000 - 8 * 3600000),
     aiConfidence: 96,
     rootCause: 'Long-running analytics query on primary blocked WAL streaming to replicas for 12 minutes',
     affectedServices: ['postgres-cluster', 'user-service', 'product-catalog'],
@@ -92,28 +92,28 @@ export const mockIncidents = [
 
 export const mockMetrics = {
   cpu: Array.from({ length: 30 }, (_, i) => ({
-    time: new Date(Date.now() - (30 - i) * 60000).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
-    value: 45 + Math.sin(i * 0.5) * 20 + Math.random() * 15,
+    time: new Date(1716500000000 - (30 - i) * 60000).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
+    value: 45 + Math.sin(i * 0.5) * 20 + 0.5 * 15,
     threshold: 80,
   })),
   memory: Array.from({ length: 30 }, (_, i) => ({
-    time: new Date(Date.now() - (30 - i) * 60000).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
-    value: 62 + Math.sin(i * 0.3) * 15 + Math.random() * 10,
+    time: new Date(1716500000000 - (30 - i) * 60000).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
+    value: 62 + Math.sin(i * 0.3) * 15 + 0.5 * 10,
     threshold: 85,
   })),
   latency: Array.from({ length: 30 }, (_, i) => ({
-    time: new Date(Date.now() - (30 - i) * 60000).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
-    p50: 45 + Math.random() * 20,
-    p95: 120 + Math.random() * 80,
-    p99: 280 + (i > 20 ? (i - 20) * 40 : 0) + Math.random() * 100,
+    time: new Date(1716500000000 - (30 - i) * 60000).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
+    p50: 45 + 0.5 * 20,
+    p95: 120 + 0.5 * 80,
+    p99: 280 + (i > 20 ? (i - 20) * 40 : 0) + 0.5 * 100,
   })),
   errorRate: Array.from({ length: 30 }, (_, i) => ({
-    time: new Date(Date.now() - (30 - i) * 60000).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
-    value: i > 22 ? 15 + (i - 22) * 3 + Math.random() * 5 : 0.5 + Math.random() * 1.5,
+    time: new Date(1716500000000 - (30 - i) * 60000).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
+    value: i > 22 ? 15 + (i - 22) * 3 + 0.5 * 5 : 0.5 + 0.5 * 1.5,
   })),
   requests: Array.from({ length: 30 }, (_, i) => ({
-    time: new Date(Date.now() - (30 - i) * 60000).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
-    value: 8500 + Math.sin(i * 0.4) * 2000 + Math.random() * 1000,
+    time: new Date(1716500000000 - (30 - i) * 60000).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
+    value: 8500 + Math.sin(i * 0.4) * 2000 + 0.5 * 1000,
   })),
 };
 
@@ -124,25 +124,25 @@ export const mockServices = [
   { id: 'order-service', name: 'Order Service', status: 'degraded', health: 58, requests: 2340, errors: 18.7, latency: 1890, dependencies: ['payment-service', 'inventory-service', 'postgres-primary'] },
   { id: 'user-service', name: 'User Service', status: 'healthy', health: 98, requests: 6780, errors: 0.1, latency: 45, dependencies: ['postgres-replica', 'redis-cluster'] },
   { id: 'product-catalog', name: 'Product Catalog', status: 'healthy', health: 99, requests: 15600, errors: 0.0, latency: 32, dependencies: ['postgres-replica', 'elasticsearch'] },
-  { id: 'inventory-service', name: 'Inventory Service', status: 'healthy', health: 94, requests: 4320, errors: 0.8, latency: 78, dependencies: ['postgres-primary', 'redis-cluster'] },
+  { id: 'inventory-service', name: 'Inventory Service', status: 'healthy', health: 94, requests: 4320, errors: 0.8, latency: 78, dependencies: ['mongodb-primary', 'redis-cluster'] },
   { id: 'notification-service', name: 'Notification Service', status: 'healthy', health: 97, requests: 8900, errors: 0.2, latency: 120, dependencies: ['ses', 'twilio'] },
   { id: 'fraud-detection', name: 'Fraud Detection', status: 'degraded', health: 62, requests: 3820, errors: 8.4, latency: 2100, dependencies: ['ml-inference', 'redis-cluster'] },
-  { id: 'postgres-primary', name: 'Postgres Primary', status: 'critical', health: 31, requests: 24500, errors: 0.0, latency: 4200, dependencies: [] },
+  { id: 'mongodb-primary', name: 'MongoDB Primary', status: 'critical', health: 31, requests: 24500, errors: 0.0, latency: 4200, dependencies: [] },
   { id: 'redis-cluster', name: 'Redis Cluster', status: 'degraded', health: 55, requests: 89200, errors: 0.0, latency: 42, dependencies: [] },
   { id: 'elasticsearch', name: 'Elasticsearch', status: 'healthy', health: 99, requests: 5600, errors: 0.1, latency: 28, dependencies: [] },
 ];
 
 export const mockLogs = [
-  { id: 1, timestamp: new Date(Date.now() - 2000), level: 'error', service: 'payment-service', pod: 'payment-svc-7d9f8b-xk2p4', message: 'Connection pool exhausted: max connections (100) reached for postgres://payment-db:5432/payments', trace: 'trace-a8f2c4d1' },
-  { id: 2, timestamp: new Date(Date.now() - 5000), level: 'error', service: 'payment-service', pod: 'payment-svc-7d9f8b-xk2p4', message: 'Query timeout after 8000ms: SELECT * FROM transactions WHERE user_id = $1 AND status = \'pending\'', trace: 'trace-b3e1a2f9' },
-  { id: 3, timestamp: new Date(Date.now() - 8000), level: 'warn', service: 'order-service', pod: 'order-svc-6c8f4a-mn3r1', message: 'Payment service unavailable, retrying (attempt 3/5) with exponential backoff', trace: 'trace-c7d4b8e2' },
-  { id: 4, timestamp: new Date(Date.now() - 12000), level: 'error', service: 'auth-service', pod: 'auth-svc-9b2e7f-pq4s5', message: 'Redis TIMEOUT: GET session:usr_a8f2c3d4 took 3200ms (threshold: 500ms)', trace: 'trace-d1f3a9c6' },
-  { id: 5, timestamp: new Date(Date.now() - 18000), level: 'info', service: 'api-gateway', pod: 'api-gw-5f1c3b-wx8y2', message: 'Circuit breaker OPEN for payment-service: 35% error rate over last 60s', trace: 'trace-e5b2c8d3' },
-  { id: 6, timestamp: new Date(Date.now() - 24000), level: 'warn', service: 'fraud-detection', pod: 'fraud-det-3a7c9f-ab5k6', message: 'ML inference latency degraded: avg 2100ms vs baseline 450ms — possible resource contention', trace: 'trace-f9a1d4e7' },
-  { id: 7, timestamp: new Date(Date.now() - 31000), level: 'error', service: 'postgres-primary', pod: 'pg-primary-0', message: 'FATAL: remaining connection slots reserved for non-replication superuser connections', trace: 'trace-g4c7b2f8' },
-  { id: 8, timestamp: new Date(Date.now() - 38000), level: 'info', service: 'payment-service', pod: 'payment-svc-7d9f8b-xk2p4', message: 'Deployment v2.3.1 started — rolling update 0/6 pods updated', trace: 'trace-h2e9d5a1' },
-  { id: 9, timestamp: new Date(Date.now() - 45000), level: 'info', service: 'k8s-controller', pod: 'kube-controller-manager', message: 'HPA scaled payment-service from 6 to 12 replicas based on CPU utilization (87%)', trace: null },
-  { id: 10, timestamp: new Date(Date.now() - 52000), level: 'warn', service: 'auth-service', pod: 'auth-svc-9b2e7f-rt6u1', message: 'High JWT verification error rate: 847 failures in last 60s (baseline: 12)', trace: 'trace-j8f3c6b4' },
+  { id: 1, timestamp: new Date(1716500000000 - 2000), level: 'error', service: 'payment-service', pod: 'payment-svc-7d9f8b-xk2p4', message: 'Connection pool exhausted: max connections (100) reached for mongodb://payment-db:27017/payments', trace: 'trace-a8f2c4d1' },
+  { id: 2, timestamp: new Date(1716500000000 - 5000), level: 'error', service: 'payment-service', pod: 'payment-svc-7d9f8b-xk2p4', message: 'Query timeout after 8000ms: db.transactions.find({user_id: $1, status: \'pending\'})', trace: 'trace-b3e1a2f9' },
+  { id: 3, timestamp: new Date(1716500000000 - 8000), level: 'warn', service: 'order-service', pod: 'order-svc-6c8f4a-mn3r1', message: 'Payment service unavailable, retrying (attempt 3/5) with exponential backoff', trace: 'trace-c7d4b8e2' },
+  { id: 4, timestamp: new Date(1716500000000 - 12000), level: 'error', service: 'auth-service', pod: 'auth-svc-9b2e7f-pq4s5', message: 'Redis TIMEOUT: GET session:usr_a8f2c3d4 took 3200ms (threshold: 500ms)', trace: 'trace-d1f3a9c6' },
+  { id: 5, timestamp: new Date(1716500000000 - 18000), level: 'info', service: 'api-gateway', pod: 'api-gw-5f1c3b-wx8y2', message: 'Circuit breaker OPEN for payment-service: 35% error rate over last 60s', trace: 'trace-e5b2c8d3' },
+  { id: 6, timestamp: new Date(1716500000000 - 24000), level: 'warn', service: 'fraud-detection', pod: 'fraud-det-3a7c9f-ab5k6', message: 'ML inference latency degraded: avg 2100ms vs baseline 450ms — possible resource contention', trace: 'trace-f9a1d4e7' },
+  { id: 7, timestamp: new Date(1716500000000 - 31000), level: 'error', service: 'postgres-primary', pod: 'pg-primary-0', message: 'FATAL: remaining connection slots reserved for non-replication superuser connections', trace: 'trace-g4c7b2f8' },
+  { id: 8, timestamp: new Date(1716500000000 - 38000), level: 'info', service: 'payment-service', pod: 'payment-svc-7d9f8b-xk2p4', message: 'Deployment v2.3.1 started — rolling update 0/6 pods updated', trace: 'trace-h2e9d5a1' },
+  { id: 9, timestamp: new Date(1716500000000 - 45000), level: 'info', service: 'k8s-controller', pod: 'kube-controller-manager', message: 'HPA scaled payment-service from 6 to 12 replicas based on CPU utilization (87%)', trace: null },
+  { id: 10, timestamp: new Date(1716500000000 - 52000), level: 'warn', service: 'auth-service', pod: 'auth-svc-9b2e7f-rt6u1', message: 'High JWT verification error rate: 847 failures in last 60s (baseline: 12)', trace: 'trace-j8f3c6b4' },
 ];
 
 export const mockAIInsights = [
@@ -179,10 +179,10 @@ export const mockAIInsights = [
 ];
 
 export const mockDeployments = [
-  { id: 'dep-001', service: 'payment-service', version: 'v2.3.1', environment: 'production', status: 'suspicious', timestamp: new Date(Date.now() - 38 * 60000), author: 'carlos.mendez', commitHash: 'a8f2c3d', prTitle: 'feat: batch transaction processing optimization', aiRisk: 92 },
-  { id: 'dep-002', service: 'auth-service', version: 'v5.1.8', environment: 'production', status: 'safe', timestamp: new Date(Date.now() - 2 * 3600000), author: 'sarah.chen', commitHash: 'b3e1a2f', prTitle: 'fix: JWT token refresh edge case', aiRisk: 12 },
-  { id: 'dep-003', service: 'api-gateway', version: 'v3.0.4', environment: 'production', status: 'safe', timestamp: new Date(Date.now() - 5 * 3600000), author: 'marcus.j', commitHash: 'c7d4b8e', prTitle: 'perf: request deduplication middleware', aiRisk: 18 },
-  { id: 'dep-004', service: 'fraud-detection', version: 'v1.9.2', environment: 'production', status: 'safe', timestamp: new Date(Date.now() - 8 * 3600000), author: 'alex.r', commitHash: 'd1f3a9c', prTitle: 'chore: update ML model weights v14', aiRisk: 24 },
+  { id: 'dep-001', service: 'payment-service', version: 'v2.3.1', environment: 'production', status: 'suspicious', timestamp: new Date(1716500000000 - 38 * 60000), author: 'carlos.mendez', commitHash: 'a8f2c3d', prTitle: 'feat: batch transaction processing optimization', aiRisk: 92 },
+  { id: 'dep-002', service: 'auth-service', version: 'v5.1.8', environment: 'production', status: 'safe', timestamp: new Date(1716500000000 - 2 * 3600000), author: 'sarah.chen', commitHash: 'b3e1a2f', prTitle: 'fix: JWT token refresh edge case', aiRisk: 12 },
+  { id: 'dep-003', service: 'api-gateway', version: 'v3.0.4', environment: 'production', status: 'safe', timestamp: new Date(1716500000000 - 5 * 3600000), author: 'marcus.j', commitHash: 'c7d4b8e', prTitle: 'perf: request deduplication middleware', aiRisk: 18 },
+  { id: 'dep-004', service: 'fraud-detection', version: 'v1.9.2', environment: 'production', status: 'safe', timestamp: new Date(1716500000000 - 8 * 3600000), author: 'alex.r', commitHash: 'd1f3a9c', prTitle: 'chore: update ML model weights v14', aiRisk: 24 },
 ];
 
 export const mockTeamStats = {
@@ -198,7 +198,7 @@ export const mockChatMessages = [
     id: 1,
     role: 'user' as const,
     content: 'What is causing the payment service degradation?',
-    timestamp: new Date(Date.now() - 5 * 60000),
+    timestamp: new Date(1716500000000 - 5 * 60000),
   },
   {
     id: 2,
@@ -228,13 +228,13 @@ kubectl set env deployment/payment-service DB_POOL_SIZE=200 -n production
 \`\`\`
 
 Estimated recovery time: **8-12 minutes** after rollback.`,
-    timestamp: new Date(Date.now() - 4 * 60000),
+    timestamp: new Date(1716500000000 - 4 * 60000),
   },
   {
     id: 3,
     role: 'user' as const,
     content: 'Show me the exact query causing the issue',
-    timestamp: new Date(Date.now() - 3 * 60000),
+    timestamp: new Date(1716500000000 - 3 * 60000),
   },
   {
     id: 4,
@@ -265,6 +265,6 @@ SELECT email, name FROM users WHERE id = $2;
 - Throughput degradation: -97.3%
 
 The fix requires restoring the JOIN query or implementing DataLoader-style batching.`,
-    timestamp: new Date(Date.now() - 2 * 60000),
+    timestamp: new Date(1716500000000 - 2 * 60000),
   },
 ];

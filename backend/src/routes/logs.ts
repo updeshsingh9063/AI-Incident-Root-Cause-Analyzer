@@ -4,12 +4,12 @@ const router = Router();
 
 const LOG_MESSAGES = [
   { level: 'error', service: 'payment-service', message: 'Connection pool exhausted: max connections (100) reached' },
-  { level: 'error', service: 'payment-service', message: 'Query timeout after 8000ms: SELECT * FROM transactions' },
+  { level: 'error', service: 'payment-service', message: 'Query timeout after 8000ms: db.transactions.find()' },
   { level: 'warn',  service: 'order-service',   message: 'Payment service unavailable, retrying (attempt 3/5)' },
   { level: 'error', service: 'auth-service',     message: 'Redis TIMEOUT: GET session:usr_a8f2 took 3200ms' },
   { level: 'info',  service: 'api-gateway',      message: 'Circuit breaker OPEN for payment-service: 35% error rate' },
   { level: 'warn',  service: 'fraud-detection',  message: 'ML inference latency degraded: avg 2100ms vs baseline 450ms' },
-  { level: 'error', service: 'postgres-primary', message: 'FATAL: remaining connection slots reserved for superuser' },
+  { level: 'error', service: 'mongodb-primary', message: 'FATAL: remaining connection slots reserved for admin' },
 ];
 
 router.get('/', (req: Request, res: Response) => {

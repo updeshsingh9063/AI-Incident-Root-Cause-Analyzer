@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import { mockChatMessages } from '@/lib/mock-data';
 
+const API_BASE = '/api';
+
 const SUGGESTIONS = [
   "What caused the payment service outage?",
   "Show me the blast radius of INC-2847",
@@ -17,7 +19,7 @@ const SUGGESTIONS = [
   "Suggest remediation steps for the DB connection issue",
 ];
 
-function MessageBlock({ msg }: { msg: typeof mockChatMessages[0] }) {
+function MessageBlock({ msg }: { msg: any }) {
   const isUser = msg.role === 'user';
 
   // Parse code blocks from markdown-style content
@@ -94,7 +96,7 @@ function MessageBlock({ msg }: { msg: typeof mockChatMessages[0] }) {
 }
 
 export default function CopilotPage() {
-  const [messages, setMessages] = useState(mockChatMessages);
+  const [messages, setMessages] = useState<any[]>(mockChatMessages);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -108,7 +110,7 @@ export default function CopilotPage() {
     if (!content.trim()) return;
 
     const userMsg = {
-      id: messages.length + 1,
+      id: Date.now(),
       role: 'user' as const,
       content,
       timestamp: new Date(),
@@ -117,17 +119,44 @@ export default function CopilotPage() {
     setInput('');
     setIsTyping(true);
 
-    // Simulate AI response delay
-    await new Promise(r => setTimeout(r, 1800));
-    setIsTyping(false);
+    try {
+      const response = await fetch(`${API_BASE}/ai/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: content,
+          conversationId: 'copilot-session-1',
+          context: {
+            current_service: 'payment-service',
+            incident_id: 'INC-2847',
+          }
+        })
+      });
 
-    const aiMsg = {
-      id: messages.length + 2,
-      role: 'assistant' as const,
-      content: `I'm analyzing your request about **"${content}"**.\n\nBased on current telemetry data, here's what I found:\n\n- **Payment service** is showing P99 latency of 8,240ms (baseline: 45ms)\n- Root cause identified with **94% confidence**: DB connection pool exhaustion from N+1 query in v2.3.1\n- **3 downstream services** are affected: order-service, fraud-detection, api-gateway\n\n**Recommended immediate action:**\n\`\`\`bash\nkubectl rollout undo deployment/payment-service -n production\n\`\`\`\n\nEstimated recovery: **8–12 minutes** post-rollback.`,
-      timestamp: new Date(),
-    };
-    setMessages(prev => [...prev, aiMsg]);
+      if (!response.ok) throw new Error(`API returned status ${response.status}`);
+      const data = await response.json();
+
+      setIsTyping(false);
+      const aiMsg = {
+        id: Date.now() + 1,
+        role: 'assistant' as const,
+        content: data.content,
+        timestamp: new Date(data.timestamp || Date.now()),
+      };
+      setMessages(prev => [...prev, aiMsg]);
+    } catch (err: any) {
+      console.error('Error calling AI chat API:', err);
+      // Fallback response with typing simulation
+      await new Promise(r => setTimeout(r, 1200));
+      setIsTyping(false);
+      const aiMsg = {
+        id: Date.now() + 1,
+        role: 'assistant' as const,
+        content: `I'm analyzing your request about **"${content}"** (Simulation Mode).\n\nBased on current telemetry data, here's what I found:\n\n- **Payment service** is showing P99 latency of 8,240ms (baseline: 45ms)\n- Root cause identified with **94% confidence**: DB connection pool exhaustion from N+1 query in v2.3.1\n- **3 downstream services** are affected: order-service, fraud-detection, api-gateway\n\n**Recommended immediate action:**\n\`\`\`bash\nkubectl rollout undo deployment/payment-service -n production\n\`\`\`\n\nEstimated recovery: **8–12 minutes** post-rollback.`,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, aiMsg]);
+    }
   };
 
   return (
@@ -176,7 +205,7 @@ export default function CopilotPage() {
             style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)' }}>
             <div className="flex items-center gap-2 mb-2">
               <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-              <span className="text-xs font-semibold text-purple-300">GPT-4.1 Turbo</span>
+              <span className="text-xs font-semibold text-purple-300">LLaMA-3.3-70B Active</span>
             </div>
             <div className="text-xs text-slate-500 leading-relaxed">
               Connected to live telemetry · 847 incidents in memory · RAG enabled
@@ -201,8 +230,8 @@ export default function CopilotPage() {
               animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <div className="w-2 h-2 rounded-full bg-purple-400" />
-              Analyzing telemetry
+              <div className="w-2 h-2 rounded-full bg-purple-400 animate-ping" />
+              Analyzing live telemetry
             </motion.div>
           </div>
 
@@ -244,7 +273,7 @@ export default function CopilotPage() {
                 }}
                 placeholder="Ask about incidents, logs, metrics, deployments... (Shift+Enter for newline)"
                 rows={1}
-                className="flex-1 bg-transparent text-sm text-slate-300 placeholder:text-slate-600 outline-none resize-none"
+                className="flex-1 bg-transparent text-sm text-slate-300 placeholder:text-slate-600 outline-none resize-none font-sans"
                 style={{ maxHeight: '120px' }}
               />
               <div className="flex items-center gap-2 flex-shrink-0">

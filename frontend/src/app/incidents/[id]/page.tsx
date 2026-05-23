@@ -22,11 +22,13 @@ function getStatusColor(status: string) {
   }
 }
 
-function getTimeSince(date: Date) {
-  const diff = Date.now() - date.getTime();
+function getTimeSince(date: any) {
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return 'just now';
+  const diff = Date.now() - d.getTime();
   const mins = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 60) return `${Math.max(0, mins)}m ago`;
   return `${hours}h ${mins % 60}m ago`;
 }
 
@@ -87,7 +89,7 @@ export default function IncidentDetailPage() {
                   transition={{ duration: 1.5, repeat: Infinity }} />
                 {incident.status}
               </span>
-              <span className="text-xs text-slate-500 ml-auto">{getTimeSince(incident.startedAt)}</span>
+              <span className="text-xs text-slate-500 ml-auto" suppressHydrationWarning>{getTimeSince(incident.startedAt)}</span>
             </div>
             <h1 className="text-xl font-bold text-white mb-1">{incident.title}</h1>
             <p className="text-sm text-slate-400 leading-relaxed">{incident.description}</p>

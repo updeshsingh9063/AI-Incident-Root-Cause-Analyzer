@@ -31,11 +31,11 @@ services:
       - FRONTEND_URL=http://localhost:3000
       - AI_SERVICE_URL=http://ai-service:8000
       - REDIS_URL=redis://redis:6379
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/incidents
+      - DATABASE_URL=mongodb://mongodb:27017/incidents
       - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
       - SKIP_AUTH=true
     depends_on:
-      - postgres
+      - mongodb
       - redis
       - ai-service
     networks:
@@ -53,34 +53,30 @@ services:
       - "8000:8000"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY:-your-openai-api-key}
+      - GROQ_API_KEY=${GROQ_API_KEY:-your-groq-api-key}
       - PINECONE_API_KEY=${PINECONE_API_KEY:-your-pinecone-key}
       - PINECONE_ENV=${PINECONE_ENV:-us-east-1}
       - REDIS_URL=redis://redis:6379
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/incidents
+      - DATABASE_URL=mongodb://mongodb:27017/incidents
     depends_on:
-      - postgres
+      - mongodb
       - redis
     networks:
       - ai-incident-net
     restart: unless-stopped
 
-  # ── PostgreSQL ────────────────────────────────────────────────────────────────
-  postgres:
-    image: postgres:16-alpine
+  # ── MongoDB ───────────────────────────────────────────────────────────────────
+  mongodb:
+    image: mongo:latest
     ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=incidents
+      - "27017:27017"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./infrastructure/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mongodb_data:/data/db
     networks:
       - ai-incident-net
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -132,7 +128,7 @@ services:
       - prometheus
 
 volumes:
-  postgres_data:
+  mongodb_data:
   redis_data:
   prometheus_data:
   grafana_data:

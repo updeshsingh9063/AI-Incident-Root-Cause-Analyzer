@@ -30,12 +30,14 @@ const STATS = [
   { label: 'Resolved', value: '99.1%', sub: 'resolution rate', color: '#22C55E', icon: CheckCircle2 },
 ];
 
-function getTimeSince(date: Date) {
-  const diff = Date.now() - date.getTime();
+function getTimeSince(date: any) {
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return 'just now';
+  const diff = Date.now() - d.getTime();
   const mins = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 60) return `${Math.max(0, mins)}m ago`;
   if (hours < 24) return `${hours}h ago`;
   return `${days}d ago`;
 }
@@ -202,7 +204,7 @@ export default function HistoryPage() {
                       </span>
                     </td>
                     <td className="px-3 py-3.5 text-right">
-                      <span className="text-xs text-slate-500 font-mono">{getTimeSince(inc.startedAt)}</span>
+                      <span className="text-xs text-slate-500 font-mono" suppressHydrationWarning>{getTimeSince(inc.startedAt)}</span>
                     </td>
                     <td className="px-3 py-3.5">
                       <Link href={`/incidents/${inc.id}`}>

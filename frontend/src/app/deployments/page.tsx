@@ -18,11 +18,13 @@ function getRiskLabel(risk: number) {
   return 'Safe';
 }
 
-function getTimeSince(date: Date): string {
-  const diff = Date.now() - date.getTime();
+function getTimeSince(date: any): string {
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return 'just now';
+  const diff = Date.now() - d.getTime();
   const mins = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 60) return `${Math.max(0, mins)}m ago`;
   return `${hours}h ${mins % 60}m ago`;
 }
 
@@ -110,7 +112,7 @@ export default function DeploymentsPage() {
                   <div className="flex items-center gap-4 text-xs text-slate-500">
                     <span className="flex items-center gap-1.5"><GitCommit className="w-3 h-3" /><span className="font-mono">{dep.commitHash}</span></span>
                     <span className="flex items-center gap-1.5"><User className="w-3 h-3" />{dep.author}</span>
-                    <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" />{getTimeSince(dep.timestamp)}</span>
+                    <span className="flex items-center gap-1.5" suppressHydrationWarning><Clock className="w-3 h-3" />{getTimeSince(dep.timestamp)}</span>
                   </div>
                 </div>
 

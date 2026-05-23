@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import { logger } from '../utils/logger';
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
-  // Skip auth in development
-  if (process.env.NODE_ENV === 'development' && process.env.SKIP_AUTH === 'true') {
+  // Skip auth in development/demo mode if configured
+  if (process.env.SKIP_AUTH === 'true') {
     return next();
   }
 

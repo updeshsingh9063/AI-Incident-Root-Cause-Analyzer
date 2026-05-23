@@ -13,6 +13,7 @@ scikit-learn==1.4.0
 python-dotenv==1.0.0
 httpx==0.26.0
 redis==5.0.1
-psycopg2-binary==2.9.9
+motor==3.3.2
 aiofiles==23.2.1
 python-multipart==0.0.7
+groq==0.4.2
